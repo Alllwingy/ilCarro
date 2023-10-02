@@ -25,7 +25,6 @@ public class LoginTests {
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
     }
 
-    @Test
     public void loginPositive() {
 /*
 1. click login
@@ -34,20 +33,20 @@ public class LoginTests {
 4. validate by text: Logged in success in the element //h2[@class='message']
  */
 
-        WebElement buttonLogin = driver.findElement(By.xpath(""));
+        WebElement buttonLogin = driver.findElement(By.xpath("//a[contains(@href, '/login')]"));
         buttonLogin.click();
 
-        WebElement inputEmail = driver.findElement(By.xpath(""));
+        WebElement inputEmail = driver.findElement(By.xpath("//input[@id='email']"));
         inputEmail.click();
         inputEmail.clear();
-        inputEmail.sendKeys("");
+        inputEmail.sendKeys("7654321@gmail.com");
 
-        WebElement inputPassword = driver.findElement(By.xpath(""));
+        WebElement inputPassword = driver.findElement(By.xpath("//input[@id='password']"));
         inputPassword.click();
         inputPassword.clear();
-        inputPassword.sendKeys("");
+        inputPassword.sendKeys("1234567Aa$");
 
-        WebElement buttonYalla = driver.findElement(By.xpath(""));
+        WebElement buttonYalla = driver.findElement(By.xpath("//button[@type='submit']"));
         buttonYalla.click();
 
         WebElement textMessagePopUpH2 = driver.findElement(By.xpath("//h2[@class='message']"));
