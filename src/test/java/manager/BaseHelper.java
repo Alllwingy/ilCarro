@@ -1,8 +1,7 @@
 package manager;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
@@ -23,12 +22,6 @@ public class BaseHelper {
     private List<WebElement> findElementsBase(By locator) {
 
         return driver.findElements(locator);
-    }
-
-    public void clickBase(By locator) {
-
-        WebElement element = findElementBase(locator);
-        element.click();
     }
 
     public String getTextBase(By locator) {
@@ -55,8 +48,30 @@ public class BaseHelper {
             return true;
         } else {
 
-            System.out.println("expected result: " + expectedResult + " actual result: " + actualResult);
+            System.out.println("expected result: " + expectedResult + "\nactual result: " + actualResult);
             return false;
         }
+    }
+
+    public void clickBase(By locator) {
+
+        WebElement element = findElementBase(locator);
+        element.click();
+    }
+
+    public void jsClickBase(String locator) {
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript(locator);
+    }
+
+    public void clickByXY(By locator, int down, int right) { // 10 12
+
+        Rectangle rectangle = findElementBase(locator).getRect();
+        int x = rectangle.getX() + right;
+        int y = rectangle.getY() - down;
+
+        Actions actions = new Actions(driver);
+        actions.moveByOffset(x,y).click().perform();
     }
 }
