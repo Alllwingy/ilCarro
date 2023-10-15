@@ -5,8 +5,9 @@ import dto.UserDTOLombok;
 import dto.UserDTOWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 
-public class UserHelper extends BaseHelper{
+public class UserHelper extends BaseHelper {
 
     public UserHelper(WebDriver driver) {
         super(driver);
@@ -29,7 +30,15 @@ public class UserHelper extends BaseHelper{
     By textSuccessRegistrationPopUp = By.xpath("//div[@class='dialog-container']//h1[@class='title']");
 
     String checkBoxRegistrationFormJS = "document.querySelector('#terms-of-use').click();";
+    String buttonOkPopUpString = "document.querySelector(`[type='button']`).click();";
     By checkBoxRegistrationFormXPath = By.xpath("//*[@id='terms-of-use']");
+
+    By buttonLogout = By.xpath("//a[contains(@href, 'logout')]"); //2
+
+    By buttonOkPopUp = By.xpath("//button[@type='button']");
+
+    By errorMessageWrongEmailRegistration = By.xpath("//input[@autocomplete='email']/..//div//div");
+    By errorMessageEmptyEmailRegistration = By.xpath("//div[@class='error']/div");
 
     public void login(UserDTO userDTO) {
 
@@ -55,25 +64,64 @@ public class UserHelper extends BaseHelper{
         clickBase(btnYalla);
     }
 
-    public boolean validatePopUpMessageSuccessAfterLogin() {
-
-        return isTextEqual(textSuccessLoginPopUp, "Logged in success");
-    }
-
-    public void register(UserDTOLombok userDTOLombok) {
+    public void registration(UserDTOLombok userDTOLombok) {
 
         clickBase(btnRegistrationNavigatorMenu);
         typeTextBase(inputNameForm, userDTOLombok.getName());
         typeTextBase(inputLastNameForm, userDTOLombok.getLastName());
         typeTextBase(inputEmailForm, userDTOLombok.getEmail());
         typeTextBase(inputPasswordForm, userDTOLombok.getPassword());
-//        jsClickBase(checkBoxRegistrationForm);
-        clickByXY(checkBoxRegistrationFormXPath, 1,1 );
+        executeScript(checkBoxRegistrationFormJS);
+//        clickByXY(checkBoxRegistrationFormXPath, 1,1 );
         clickBase(btnYalla);
+    }
+
+    public boolean validatePopUpMessageSuccessAfterLogin() {
+
+        return isTextEqual(textSuccessLoginPopUp, "Logged in success");
     }
 
     public boolean validatePopUpMessageSuccessAfterRegistration() {
 
         return isTextEqual(textSuccessRegistrationPopUp, "REGISTERED");
+    }
+
+    public boolean validatePopUpMessageLoginIncorrect() {
+
+        return isTextEqual(textSuccessLoginPopUp, "\"Login or Password incorrect\"");
+    }
+
+    public boolean validateMessageWrongEmail() {
+
+        return isTextEqual(errorMessageWrongEmailRegistration, "Wrong email format");
+    }
+    public boolean validateMessageEmptyEmail() {
+
+        return isTextEqual(errorMessageEmptyEmailRegistration, "Email is required");
+    }
+    public boolean validateMessageWrongPassword() {
+
+        return isTextEqual(errorMessageEmptyEmailRegistration, "Password must contain minimum 8 symbols");
+    }
+
+    public void clickOkPopUpSuccessLogin() {
+
+        if (isElementExists(buttonOkPopUp))
+            executeScript(buttonOkPopUpString);
+//        clickBase(buttonOkPopUp);
+    }
+
+    public void clickOkPopUpSuccess(String action) {
+
+//        clickByXY(buttonOkPopUp, 1, 1);
+
+        Actions actions = new Actions(driver);
+        actions.sendKeys(action);
+    }
+
+    public void logoutIfLogin() {
+
+        if (isElementExists(buttonLogout))
+            clickBase(buttonLogout);
     }
 }

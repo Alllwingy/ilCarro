@@ -24,6 +24,22 @@ public class BaseHelper {
         return driver.findElements(locator);
     }
 
+    public void pause(int seconds) {
+        try {
+
+            Thread.sleep(seconds * 1_000L);
+
+        } catch (InterruptedException e) {
+
+            throw new RuntimeException(e); }
+    }
+
+    public boolean isElementExists(By locator) {
+
+        return !findElementsBase(locator).isEmpty();
+//        return findElementsBase(locator).size() > 0;
+    }
+
     public String getTextBase(By locator) {
 
         WebElement element = findElementBase(locator);
@@ -59,13 +75,13 @@ public class BaseHelper {
         element.click();
     }
 
-    public void jsClickBase(String locator) {
+    public void executeScript(String query) {
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript(locator);
+        js.executeScript(query);
     }
 
-    public void clickByXY(By locator, int down, int right) { // 10 12
+    public void clickByXY(By locator, int down, int right) {
 
         Rectangle rectangle = findElementBase(locator).getRect();
         int x = rectangle.getX() + right;
